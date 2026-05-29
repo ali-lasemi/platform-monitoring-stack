@@ -15,13 +15,14 @@ The goal is to provide practical monitoring workflows focused on:
 - Alerting
 - Operational awareness
 - Production troubleshooting
+- Incident response
 
 ---
 
 # Stack Components
 
 ## Prometheus
-Metrics collection and monitoring.
+Metrics collection, scraping and alert rule evaluation.
 
 ## Grafana
 Visualization dashboards and operational insights.
@@ -32,15 +33,24 @@ Centralized log aggregation.
 ## Alertmanager
 Alert routing and notification management.
 
+## Node Exporter
+Host-level metrics collection.
+
+## cAdvisor
+Container-level metrics collection.
+
 ---
 
 # Features
 
 - Infrastructure monitoring
+- Container monitoring
 - Service health visibility
 - Centralized logging
 - Dashboard examples
-- Alerting workflows
+- Alert rules
+- Alert routing strategy
+- Incident runbook
 - Docker-based deployment
 - Operational troubleshooting guides
 
@@ -50,8 +60,8 @@ Alert routing and notification management.
 
 ```txt
 docs/                  Documentation and operational guides
-examples/              Example configs and dashboards
-docker/                Docker compose deployment
+examples/              Example configs, rules and dashboards
+docker/                Docker Compose deployment
 scripts/               Operational helper scripts
 .github/workflows/     CI validation workflows
 ```
@@ -65,25 +75,29 @@ scripts/               Operational helper scripts
                  │   Applications  │
                  └────────┬────────┘
                           │
-          ┌───────────────┼───────────────┐
-          ▼                               ▼
- ┌────────────────┐             ┌────────────────┐
- │   Prometheus   │             │      Loki      │
- │ Metrics System │             │ Log Aggregator │
- └────────┬───────┘             └────────┬───────┘
-          │                              │
-          └──────────────┬───────────────┘
-                         ▼
-               ┌────────────────┐
-               │    Grafana     │
-               │ Dashboards UI  │
-               └────────┬───────┘
-                        │
-                        ▼
-               ┌────────────────┐
-               │ Alertmanager   │
-               │ Notifications  │
-               └────────────────┘
+          ┌───────────────┼────────────────┐
+          ▼               ▼                ▼
+ ┌────────────────┐ ┌──────────────┐ ┌──────────────┐
+ │   Prometheus   │ │ Node Exporter│ │   cAdvisor   │
+ │ Metrics System │ │ Host Metrics │ │Container Mtrs│
+ └────────┬───────┘ └──────┬───────┘ └──────┬───────┘
+          │                │                │
+          └────────────────┼────────────────┘
+                           ▼
+                    ┌─────────────┐
+                    │   Grafana   │
+                    │ Dashboards  │
+                    └─────────────┘
+
+                 ┌─────────────────┐
+                 │      Loki       │
+                 │ Log Aggregation │
+                 └─────────────────┘
+
+                 ┌─────────────────┐
+                 │  Alertmanager   │
+                 │ Alert Routing   │
+                 └─────────────────┘
 ```
 
 ---
@@ -92,11 +106,27 @@ scripts/               Operational helper scripts
 
 The monitoring stack is designed to run using Docker Compose.
 
-Example deployment:
+```bash
+docker compose -f docker/docker-compose.yml up -d
+```
+
+---
+
+# Healthcheck
 
 ```bash
-docker compose up -d
+./scripts/healthcheck.sh
 ```
+
+---
+
+# Documentation
+
+- [Deployment Guide](docs/deployment.md)
+- [Alert Rules](docs/alerts.md)
+- [Grafana Dashboards](docs/dashboards.md)
+- [Incident Runbook](docs/runbook.md)
+- [Troubleshooting](docs/troubleshooting.md)
 
 ---
 
@@ -113,10 +143,10 @@ docker compose up -d
 
 # Roadmap
 
-- Node exporter integration
-- Container monitoring
-- Advanced dashboards
-- Alert routing examples
+- Advanced Grafana dashboards
+- Log retention strategies
+- Backup automation
+- Reverse proxy integration
 - Kubernetes monitoring
 - Distributed tracing integration
 - SLO / SLI examples
@@ -129,6 +159,7 @@ docker compose up -d
 Good systems are observable.
 Reliable systems are monitored.
 Operational visibility matters.
+Alerts should be actionable.
 ```
 
 ---

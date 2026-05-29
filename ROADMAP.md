@@ -13,6 +13,9 @@
 - [x] Grafana dashboard example
 - [x] Node exporter integration
 - [x] Container monitoring
+- [x] Alert rules
+- [x] Alertmanager routing
+- [x] Incident runbook
 
 ---
 
@@ -22,7 +25,6 @@
 - [ ] Log retention strategies
 - [ ] Backup automation
 - [ ] Reverse proxy integration
-- [ ] Alert rules
 
 ---
 
