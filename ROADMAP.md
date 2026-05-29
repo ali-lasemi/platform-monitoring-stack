@@ -16,12 +16,14 @@
 - [x] Alert rules
 - [x] Alertmanager routing
 - [x] Incident runbook
+- [x] Advanced infrastructure dashboard
+- [x] Container monitoring dashboard
 
 ---
 
 ## Phase 2 — Advanced Monitoring
 
-- [ ] Advanced Grafana dashboards
+- [ ] Grafana provisioning examples
 - [ ] Log retention strategies
 - [ ] Backup automation
 - [ ] Reverse proxy integration
