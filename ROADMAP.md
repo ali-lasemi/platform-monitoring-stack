@@ -19,13 +19,13 @@
 - [x] Advanced infrastructure dashboard
 - [x] Container monitoring dashboard
 - [x] Grafana provisioning examples
+- [x] Backup automation
 
 ---
 
 ## Phase 2 — Advanced Monitoring
 
 - [ ] Log retention strategies
-- [ ] Backup automation
 - [ ] Reverse proxy integration
 
 ---
