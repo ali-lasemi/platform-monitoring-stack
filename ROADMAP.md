@@ -11,17 +11,18 @@
 - [x] Healthcheck workflow
 - [x] Deployment documentation
 - [x] Grafana dashboard example
+- [x] Node exporter integration
+- [x] Container monitoring
 
 ---
 
 ## Phase 2 — Advanced Monitoring
 
-- [ ] Node exporter integration
-- [ ] Container monitoring
 - [ ] Advanced Grafana dashboards
 - [ ] Log retention strategies
 - [ ] Backup automation
 - [ ] Reverse proxy integration
+- [ ] Alert rules
 
 ---
 
