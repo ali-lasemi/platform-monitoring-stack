@@ -18,12 +18,12 @@
 - [x] Incident runbook
 - [x] Advanced infrastructure dashboard
 - [x] Container monitoring dashboard
+- [x] Grafana provisioning examples
 
 ---
 
 ## Phase 2 — Advanced Monitoring
 
-- [ ] Grafana provisioning examples
 - [ ] Log retention strategies
 - [ ] Backup automation
 - [ ] Reverse proxy integration

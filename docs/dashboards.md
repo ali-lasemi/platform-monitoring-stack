@@ -6,10 +6,23 @@ This repository includes example Grafana dashboards for platform, infrastructure
 
 ## Included Dashboards
 
-```txt
-examples/grafana/dashboard.json
-examples/grafana/container-dashboard.json
-```
+- examples/grafana/dashboard.json
+- examples/grafana/container-dashboard.json
+
+---
+
+## Provisioning
+
+Grafana provisioning examples are available in:
+
+- examples/grafana/provisioning/datasources/datasources.yml
+- examples/grafana/provisioning/dashboards/dashboards.yml
+
+These files automatically configure:
+
+- Prometheus datasource
+- Loki datasource
+- Dashboard loading from filesystem
 
 ---
 
@@ -37,13 +50,19 @@ The container dashboard provides visibility into:
 
 ---
 
-## Import Dashboard
+## Manual Import
 
 1. Open Grafana
 2. Go to Dashboards
 3. Click Import
 4. Upload one of the dashboard JSON files
 5. Select Prometheus as the data source
+
+---
+
+## Automated Provisioning
+
+When using the provided Docker Compose stack, Grafana loads datasources and dashboards automatically from the provisioning directory.
 
 ---
 
@@ -54,6 +73,7 @@ The dashboards use metrics from:
 - Prometheus
 - Node Exporter
 - cAdvisor
+- Loki
 
 ---
 
