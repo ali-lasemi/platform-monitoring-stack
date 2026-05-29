@@ -1,6 +1,6 @@
 # Grafana Dashboards
 
-This repository includes example Grafana dashboards for platform monitoring.
+This repository includes example Grafana dashboards for platform and infrastructure monitoring.
 
 ---
 
@@ -9,6 +9,18 @@ This repository includes example Grafana dashboards for platform monitoring.
 ```txt
 examples/grafana/dashboard.json
 ```
+
+---
+
+## Dashboard: Platform Monitoring Overview
+
+The dashboard provides visibility into:
+
+- Target availability
+- CPU usage
+- Memory usage
+- Network receive traffic
+- Network transmit traffic
 
 ---
 
@@ -22,18 +34,19 @@ examples/grafana/dashboard.json
 
 ---
 
-## Dashboard Goals
+## Metrics Used
 
-- Service health overview
-- Prometheus target visibility
-- Operational metrics
-- Incident investigation support
+The dashboard uses metrics from:
+
+- Prometheus
+- Node Exporter
+- cAdvisor
 
 ---
 
 ## Future Improvements
 
-- Node exporter dashboard
-- Container metrics dashboard
+- Container-level dashboard
 - Loki logs dashboard
+- Alert overview dashboard
 - SLO / SLI dashboard
