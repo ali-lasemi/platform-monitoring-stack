@@ -1,6 +1,6 @@
 # Alert Rules
 
-This repository includes example Prometheus alert rules and Alertmanager routing for platform monitoring.
+This repository includes example Prometheus alert rules and Alertmanager routing examples.
 
 ---
 
@@ -8,53 +8,61 @@ This repository includes example Prometheus alert rules and Alertmanager routing
 
 ### TargetDown
 
-Detects when a monitored target is unavailable.
+Detects when a monitored target becomes unavailable.
 
 ### HighCPUUsage
 
-Detects sustained high CPU usage using Node Exporter metrics.
+Detects sustained high CPU utilization.
 
 ### HighMemoryUsage
 
-Detects sustained high memory usage using Node Exporter metrics.
+Detects sustained high memory utilization.
 
 ### ContainerRestartingFrequently
 
-Detects containers that appear to restart frequently using cAdvisor metrics.
+Detects containers that appear to restart repeatedly.
 
 ---
 
-## Alert Rule Location
+## Alert Rules Location
 
-```txt
 examples/prometheus/rules/platform-alerts.yml
-```
 
 ---
 
 ## Alertmanager Configuration
 
-```txt
 examples/alertmanager/alertmanager.yml
-```
 
 ---
 
-## Routing Strategy
+## Related Documentation
 
-```txt
-critical alerts → urgent review
-warning alerts  → scheduled review
-default alerts  → fallback receiver
-```
+- alert-routing.md
+- runbook.md
 
 ---
 
-## Production Notes
+## Routing Overview
 
-- Tune thresholds based on real infrastructure
-- Route critical alerts to urgent channels
-- Route warning alerts to daily review channels
-- Avoid noisy alerts
-- Document alert response actions in runbooks
-- Integrate receivers such as Slack, Telegram, email or PagerDuty in real environments
+Critical Alerts:
+- Immediate attention
+
+Warning Alerts:
+- Scheduled operational review
+
+Info Alerts:
+- Low-priority review
+
+Default Alerts:
+- Fallback receiver
+
+---
+
+## Production Recommendations
+
+- Tune thresholds based on infrastructure
+- Reduce noisy alerts
+- Define escalation procedures
+- Connect receivers to notification platforms
+- Maintain incident runbooks
