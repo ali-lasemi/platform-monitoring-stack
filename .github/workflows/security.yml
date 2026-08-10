@@ -46,7 +46,7 @@ jobs:
           PY
 
       - name: Run Trivy filesystem scan
-        uses: aquasecurity/trivy-action@0.33.1
+        uses: aquasecurity/trivy-action@0.28.0
         with:
           scan-type: fs
           scan-ref: .
