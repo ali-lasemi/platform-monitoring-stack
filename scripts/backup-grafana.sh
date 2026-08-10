@@ -1,18 +1,22 @@
 #!/usr/bin/env bash
-set -Eeuo pipefail
+set -euo pipefail
 
-BACKUP_DIR="${BACKUP_DIR:-./backups}"
-TIMESTAMP="$(date +%Y%m%d%H%M%S)"
-BACKUP_FILE="$BACKUP_DIR/grafana-backup-$TIMESTAMP.tar.gz"
+BACKUP_ROOT="${BACKUP_ROOT:-./backups}"
+TIMESTAMP="$(date -u +%Y%m%dT%H%M%SZ)"
+BACKUP_DIR="${BACKUP_ROOT}/${TIMESTAMP}"
+ARCHIVE="${BACKUP_ROOT}/platform-monitoring-${TIMESTAMP}.tar.gz"
 
 mkdir -p "$BACKUP_DIR"
 
-echo "Creating Grafana backup..."
+cp -R examples/prometheus "$BACKUP_DIR/prometheus"
+cp -R examples/alertmanager "$BACKUP_DIR/alertmanager"
+cp -R examples/grafana "$BACKUP_DIR/grafana"
+cp -R examples/loki "$BACKUP_DIR/loki"
+cp -R examples/alloy "$BACKUP_DIR/alloy"
+cp docker/docker-compose.yml "$BACKUP_DIR/docker-compose.yml"
+cp .env.example "$BACKUP_DIR/.env.example"
 
-docker run --rm \
-  -v platform-monitoring-stack_grafana_data:/grafana-data:ro \
-  -v "$(pwd)/$BACKUP_DIR:/backup" \
-  alpine \
-  tar -czf "/backup/grafana-backup-$TIMESTAMP.tar.gz" -C /grafana-data .
+tar -czf "$ARCHIVE" -C "$BACKUP_ROOT" "$TIMESTAMP"
+tar -tzf "$ARCHIVE" >/dev/null
 
-echo "Backup created: $BACKUP_FILE"
+echo "$ARCHIVE"

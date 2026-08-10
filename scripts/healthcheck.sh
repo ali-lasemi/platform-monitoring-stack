@@ -1,24 +1,28 @@
 #!/usr/bin/env bash
-set -Eeuo pipefail
+set -euo pipefail
 
-SERVICES=(
-  "http://127.0.0.1:9090/-/healthy"
-  "http://127.0.0.1:3000/api/health"
-  "http://127.0.0.1:3100/ready"
-  "http://127.0.0.1:9093/-/healthy"
-)
+check_http() {
+  local name="$1"
+  local url="$2"
 
-for url in "${SERVICES[@]}"; do
-  echo "Checking: $url"
-
-  status_code="$(curl -sS -o /dev/null -w "%{http_code}" "$url")"
-
-  if [[ "$status_code" != "200" ]]; then
-    echo "Healthcheck failed for $url"
+  if ! curl --fail --silent --show-error "$url" >/dev/null; then
+    echo "FAIL: $name health check failed: $url"
     exit 1
   fi
 
-  echo "Healthy: $url"
-done
+  echo "OK: $name"
+}
 
-echo "All monitoring services are healthy."
+check_http "Prometheus" "http://prometheus:9090/-/ready"
+check_http "Alertmanager" "http://alertmanager:9093/-/ready"
+check_http "Loki" "http://loki:3100/ready"
+check_http "Grafana" "http://grafana:3000/api/health"
+
+TARGETS_JSON="$(curl --fail --silent http://prometheus:9090/api/v1/targets)"
+
+if echo "$TARGETS_JSON" | grep -q '"health":"down"'; then
+  echo "FAIL: one or more Prometheus targets are down"
+  exit 1
+fi
+
+echo "OK: Prometheus targets"
