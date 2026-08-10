@@ -21,7 +21,7 @@ check_url() {
   local name="$1"
   local url="$2"
 
-  for attempt in $(seq 1 30); do
+  for _ in $(seq 1 30); do
     if docker run --rm \
       --network platform-monitoring \
       curlimages/curl:8.14.1 \
