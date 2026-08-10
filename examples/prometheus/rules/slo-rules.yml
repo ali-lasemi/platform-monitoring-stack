@@ -1,0 +1,42 @@
+groups:
+  - name: platform-sli-recording
+    interval: 30s
+    rules:
+      - record: job:sli_availability:ratio_5m
+        expr: avg_over_time(up[5m])
+
+      - record: platform:sli_availability:ratio_30m
+        expr: avg(avg_over_time(up{job=~"prometheus|alertmanager|grafana|loki"}[30m]))
+
+      - record: platform:sli_availability:ratio_6h
+        expr: avg(avg_over_time(up{job=~"prometheus|alertmanager|grafana|loki"}[6h]))
+
+      - record: platform:slo_error_budget_burn_rate:ratio_30m
+        expr: (1 - platform:sli_availability:ratio_30m) / 0.001
+
+      - record: platform:slo_error_budget_burn_rate:ratio_6h
+        expr: (1 - platform:sli_availability:ratio_6h) / 0.001
+
+  - name: platform-slo-alerts
+    rules:
+      - alert: SLOFastBurn
+        expr: platform:slo_error_budget_burn_rate:ratio_30m > 14.4
+        for: 10m
+        labels:
+          severity: critical
+          team: platform
+          slo: availability
+        annotations:
+          summary: "Monitoring platform availability SLO is burning rapidly"
+          description: "The 99.9% availability SLO error budget is burning at more than 14.4x over the last 30 minutes."
+
+      - alert: SLOSlowBurn
+        expr: platform:slo_error_budget_burn_rate:ratio_6h > 6
+        for: 30m
+        labels:
+          severity: warning
+          team: platform
+          slo: availability
+        annotations:
+          summary: "Monitoring platform availability SLO is under sustained pressure"
+          description: "The 99.9% availability SLO error budget is burning at more than 6x over the last 6 hours."
