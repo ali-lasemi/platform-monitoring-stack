@@ -112,6 +112,22 @@ jobs:
             prom/prometheus:${PROMETHEUS_VERSION} \
             test rules /rules/kubernetes-alerts.test.yml
 
+      - name: Validate Tempo configuration
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}/examples/tempo/tempo.yml:/etc/tempo/tempo.yml:ro" \
+            grafana/tempo:2.8.2 \
+            -config.file=/etc/tempo/tempo.yml \
+            -config.verify
+
+      - name: Validate OpenTelemetry configuration
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}/examples/otel/otel-collector.yml:/etc/otelcol-contrib/config.yaml:ro" \
+            otel/opentelemetry-collector-contrib:0.133.0 \
+            validate \
+            --config=/etc/otelcol-contrib/config.yaml
+
       - name: Validate Alertmanager configuration
         run: |
           docker run --rm \
