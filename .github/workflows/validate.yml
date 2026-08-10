@@ -96,6 +96,22 @@ jobs:
             prom/prometheus:${PROMETHEUS_VERSION} \
             test rules /rules/slo-rules.test.yml
 
+      - name: Validate Kubernetes alert rules
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}/examples/prometheus/rules/kubernetes-alerts.yml:/rules/kubernetes-alerts.yml:ro" \
+            --entrypoint promtool \
+            prom/prometheus:${PROMETHEUS_VERSION} \
+            check rules /rules/kubernetes-alerts.yml
+
+      - name: Test Kubernetes alert rules
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}/examples/prometheus/rules:/rules:ro" \
+            --entrypoint promtool \
+            prom/prometheus:${PROMETHEUS_VERSION} \
+            test rules /rules/kubernetes-alerts.test.yml
+
       - name: Validate Alertmanager configuration
         run: |
           docker run --rm \

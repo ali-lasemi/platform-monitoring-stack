@@ -1,0 +1,43 @@
+rule_files:
+  - kubernetes-alerts.yml
+
+evaluation_interval: 1m
+
+tests:
+  - interval: 1m
+    input_series:
+      - series: 'kube_node_status_condition{node="worker-01",condition="Ready",status="true"}'
+        values: '0x10'
+
+    alert_rule_test:
+      - eval_time: 6m
+        alertname: KubernetesNodeNotReady
+        exp_alerts:
+          - exp_labels:
+              severity: critical
+              team: platform
+              node: worker-01
+              condition: Ready
+              status: true
+            exp_annotations:
+              summary: "Kubernetes node is not ready"
+              description: "Kubernetes node worker-01 has been not ready for more than 5 minutes."
+
+  - interval: 1m
+    input_series:
+      - series: 'kube_pod_status_ready{namespace="production",pod="api-1",condition="true"}'
+        values: '0x15'
+
+    alert_rule_test:
+      - eval_time: 11m
+        alertname: KubernetesPodNotReady
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              team: platform
+              namespace: production
+              pod: api-1
+              condition: true
+            exp_annotations:
+              summary: "Kubernetes pod is not ready"
+              description: "Pod production/api-1 has been not ready for more than 10 minutes."
