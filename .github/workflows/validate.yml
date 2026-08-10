@@ -72,6 +72,12 @@ jobs:
             grafana/alloy:v1.10.0 \
             validate /etc/alloy/config.alloy
 
+      - name: Verify backup and restore workflow
+        run: |
+          chmod +x scripts/backup-grafana.sh scripts/verify-restore.sh
+          ARCHIVE="$(scripts/backup-grafana.sh)"
+          scripts/verify-restore.sh "$ARCHIVE"
+
       - name: Validate Alertmanager configuration
         run: |
           docker run --rm \
