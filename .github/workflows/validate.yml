@@ -35,7 +35,8 @@ jobs:
       - name: Validate Prometheus configuration
         run: |
           docker run --rm \
-            -v "${{ github.workspace }}/examples/prometheus:/etc/prometheus:ro" \
+            -v "${{ github.workspace }}/examples/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro" \
+            -v "${{ github.workspace }}/examples/prometheus/rules/platform-alerts.yml:/etc/prometheus/rules/platform-alerts.yml:ro" \
             --entrypoint promtool \
             prom/prometheus:${PROMETHEUS_VERSION} \
             check config /etc/prometheus/prometheus.yml
