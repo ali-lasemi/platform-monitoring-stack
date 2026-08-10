@@ -1,0 +1,13 @@
+- targets:
+    - node-01.example.internal:9100
+  labels:
+    environment: production
+    role: application
+    node: node-01
+
+- targets:
+    - node-02.example.internal:9100
+  labels:
+    environment: production
+    role: database
+    node: node-02

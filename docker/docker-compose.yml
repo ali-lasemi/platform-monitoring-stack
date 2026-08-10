@@ -11,6 +11,7 @@ services:
     volumes:
       - ../examples/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - ../examples/prometheus/rules:/etc/prometheus/rules:ro
+      - ../examples/prometheus/targets:/etc/prometheus/targets:ro
       - prometheus_data:/prometheus
     networks:
       - monitoring
