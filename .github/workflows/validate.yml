@@ -27,7 +27,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Validate Docker Compose configuration
         run: docker compose -f docker/docker-compose.yml config --quiet
@@ -76,8 +76,8 @@ jobs:
 
       - name: Verify backup and restore workflow
         run: |
-          chmod +x scripts/backup-grafana.sh scripts/verify-restore.sh
-          ARCHIVE="$(scripts/backup-grafana.sh)"
+          chmod +x scripts/backup-monitoring.sh scripts/verify-restore.sh
+          ARCHIVE="$(scripts/backup-monitoring.sh)"
           scripts/verify-restore.sh "$ARCHIVE"
 
       - name: Validate SLO rules
@@ -127,6 +127,15 @@ jobs:
             otel/opentelemetry-collector-contrib:0.133.0 \
             validate \
             --config=/etc/otelcol-contrib/config.yaml
+
+      - name: Lint shell scripts
+        run: |
+          shellcheck scripts/*.sh
+
+      - name: Runtime smoke test
+        run: |
+          chmod +x scripts/runtime-smoke-test.sh
+          scripts/runtime-smoke-test.sh
 
       - name: Validate Alertmanager configuration
         run: |
