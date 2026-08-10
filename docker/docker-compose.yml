@@ -51,6 +51,21 @@ services:
     networks:
       - monitoring
 
+  alloy:
+    image: grafana/alloy:v1.10.0
+    container_name: platform-alloy
+    restart: unless-stopped
+    command:
+      - run
+      - /etc/alloy/config.alloy
+    volumes:
+      - ../examples/alloy/config.alloy:/etc/alloy/config.alloy:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - monitoring
+    depends_on:
+      - loki
+
   alertmanager:
     image: prom/alertmanager:${ALERTMANAGER_VERSION:?ALERTMANAGER_VERSION is required}
     container_name: platform-alertmanager

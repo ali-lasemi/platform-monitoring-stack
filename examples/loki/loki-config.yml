@@ -10,6 +10,10 @@ common:
       chunks_directory: /loki/chunks
       rules_directory: /loki/rules
   replication_factor: 1
+  ring:
+    instance_addr: 127.0.0.1
+    kvstore:
+      store: inmemory
 
 schema_config:
   configs:
@@ -21,5 +25,18 @@ schema_config:
         prefix: index_
         period: 24h
 
+storage_config:
+  filesystem:
+    directory: /loki/chunks
+
+compactor:
+  working_directory: /loki/compactor
+  retention_enabled: true
+  delete_request_store: filesystem
+
 limits_config:
   retention_period: 168h
+  allow_structured_metadata: true
+
+analytics:
+  reporting_enabled: false
