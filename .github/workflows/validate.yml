@@ -37,6 +37,8 @@ jobs:
           docker run --rm \
             -v "${{ github.workspace }}/examples/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro" \
             -v "${{ github.workspace }}/examples/prometheus/rules/platform-alerts.yml:/etc/prometheus/rules/platform-alerts.yml:ro" \
+            -v "${{ github.workspace }}/examples/prometheus/rules/slo-rules.yml:/etc/prometheus/rules/slo-rules.yml:ro" \
+            -v "${{ github.workspace }}/examples/prometheus/targets:/etc/prometheus/targets:ro" \
             --entrypoint promtool \
             prom/prometheus:${PROMETHEUS_VERSION} \
             check config /etc/prometheus/prometheus.yml
