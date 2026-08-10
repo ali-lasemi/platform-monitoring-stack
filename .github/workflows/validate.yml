@@ -57,6 +57,21 @@ jobs:
             prom/prometheus:${PROMETHEUS_VERSION} \
             test rules /rules/platform-alerts.test.yml
 
+      - name: Validate Loki configuration
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}/examples/loki/loki-config.yml:/etc/loki/local-config.yaml:ro" \
+            grafana/loki:${LOKI_VERSION} \
+            -config.file=/etc/loki/local-config.yaml \
+            -verify-config
+
+      - name: Validate Alloy configuration
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}/examples/alloy/config.alloy:/etc/alloy/config.alloy:ro" \
+            grafana/alloy:v1.10.0 \
+            validate /etc/alloy/config.alloy
+
       - name: Validate Alertmanager configuration
         run: |
           docker run --rm \
