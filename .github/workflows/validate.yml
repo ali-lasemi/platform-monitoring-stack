@@ -36,15 +36,17 @@ jobs:
         run: |
           docker run --rm \
             -v "${{ github.workspace }}/examples/prometheus:/etc/prometheus:ro" \
+            --entrypoint promtool \
             prom/prometheus:${PROMETHEUS_VERSION} \
-            promtool check config /etc/prometheus/prometheus.yml
+            check config /etc/prometheus/prometheus.yml
 
       - name: Validate Prometheus alert rules
         run: |
           docker run --rm \
             -v "${{ github.workspace }}/examples/prometheus/rules:/rules:ro" \
+            --entrypoint promtool \
             prom/prometheus:${PROMETHEUS_VERSION} \
-            promtool check rules /rules/platform-alerts.yml
+            check rules /rules/platform-alerts.yml
 
       - name: Validate Alertmanager configuration
         run: |
