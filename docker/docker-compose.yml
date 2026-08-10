@@ -67,6 +67,31 @@ services:
     depends_on:
       - loki
 
+  tempo:
+    image: grafana/tempo:2.8.2
+    container_name: platform-tempo
+    restart: unless-stopped
+    command:
+      - -config.file=/etc/tempo/tempo.yml
+    volumes:
+      - ../examples/tempo/tempo.yml:/etc/tempo/tempo.yml:ro
+      - tempo_data:/var/tempo
+    networks:
+      - monitoring
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.133.0
+    container_name: platform-otel-collector
+    restart: unless-stopped
+    command:
+      - --config=/etc/otelcol-contrib/config.yaml
+    volumes:
+      - ../examples/otel/otel-collector.yml:/etc/otelcol-contrib/config.yaml:ro
+    networks:
+      - monitoring
+    depends_on:
+      - tempo
+
   alertmanager:
     image: prom/alertmanager:${ALERTMANAGER_VERSION:?ALERTMANAGER_VERSION is required}
     container_name: platform-alertmanager
@@ -114,3 +139,4 @@ volumes:
   grafana_data:
   loki_data:
   alertmanager_data:
+  tempo_data:
