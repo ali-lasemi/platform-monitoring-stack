@@ -1,0 +1,46 @@
+rule_files:
+  - slo-rules.yml
+
+evaluation_interval: 1m
+
+tests:
+  - interval: 1m
+    input_series:
+      - series: 'up{job="prometheus",instance="prometheus:9090"}'
+        values: '1x40'
+      - series: 'up{job="alertmanager",instance="alertmanager:9093"}'
+        values: '1x40'
+      - series: 'up{job="grafana",instance="grafana:3000"}'
+        values: '1x40'
+      - series: 'up{job="loki",instance="loki:3100"}'
+        values: '1x40'
+
+    promql_expr_test:
+      - expr: platform:sli_availability:ratio_30m
+        eval_time: 30m
+        exp_samples:
+          - labels: '{__name__="platform:sli_availability:ratio_30m"}'
+            value: 1
+
+  - interval: 1m
+    input_series:
+      - series: 'up{job="prometheus",instance="prometheus:9090"}'
+        values: '0x40'
+      - series: 'up{job="alertmanager",instance="alertmanager:9093"}'
+        values: '0x40'
+      - series: 'up{job="grafana",instance="grafana:3000"}'
+        values: '0x40'
+      - series: 'up{job="loki",instance="loki:3100"}'
+        values: '0x40'
+
+    alert_rule_test:
+      - eval_time: 30m
+        alertname: SLOFastBurn
+        exp_alerts:
+          - exp_labels:
+              severity: critical
+              team: platform
+              slo: availability
+            exp_annotations:
+              summary: "Monitoring platform availability SLO is burning rapidly"
+              description: "The 99.9% availability SLO error budget is burning at more than 14.4x over the last 30 minutes."

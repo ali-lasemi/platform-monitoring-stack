@@ -78,6 +78,22 @@ jobs:
           ARCHIVE="$(scripts/backup-grafana.sh)"
           scripts/verify-restore.sh "$ARCHIVE"
 
+      - name: Validate SLO rules
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}/examples/prometheus/rules/slo-rules.yml:/rules/slo-rules.yml:ro" \
+            --entrypoint promtool \
+            prom/prometheus:${PROMETHEUS_VERSION} \
+            check rules /rules/slo-rules.yml
+
+      - name: Test SLO rules
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}/examples/prometheus/rules:/rules:ro" \
+            --entrypoint promtool \
+            prom/prometheus:${PROMETHEUS_VERSION} \
+            test rules /rules/slo-rules.test.yml
+
       - name: Validate Alertmanager configuration
         run: |
           docker run --rm \
